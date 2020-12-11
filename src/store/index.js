@@ -12,7 +12,8 @@ export default new Vuex.Store({
     user: {},
     idUser: null || localStorage.getItem('id'),
     token: null || localStorage.getItem('token'),
-    products: []
+    products: [],
+    pagination: null
   },
   mutations: {
     SET_INCREMENT (state, data) {
@@ -31,6 +32,9 @@ export default new Vuex.Store({
     },
     REMOVE_TOKEN (state) {
       state.token = null
+    },
+    SET_PAGINATION (state, payload) {
+      state.pagination = payload
     }
   },
   actions: {
@@ -56,12 +60,24 @@ export default new Vuex.Store({
     refreshToken (context, refreshToken) {
       axios.get('http://localhost:2020/v1/resfresh', { token: refreshToken })
     },
-    getProduct (context) {
+    getProduct (context, noPage = 1) {
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:2020/v1/products')
+        axios.get('http://localhost:2020/v1/products?page=' + noPage)
           .then((res) => {
             context.commit('SET_PRODUCTS', res.data.result.products)
+            context.commit('SET_PAGINATION', res.data.result.pagination)
             resolve(res.data.result.products)
+          })
+          .catch((err) => {
+            reject(err)
+          })
+      })
+    },
+    insertProduct (context, payload) {
+      return new Promise((resolve, reject) => {
+        axios.post('http://localhost:5000/v1/products', payload)
+          .then((res) => {
+            resolve(res)
           })
           .catch((err) => {
             reject(err)
@@ -113,6 +129,9 @@ export default new Vuex.Store({
     },
     getProduct (state) {
       return state.products
+    },
+    getPagination (state) {
+      return state.pagination
     }
   },
   modules: {

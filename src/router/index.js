@@ -5,6 +5,7 @@ import Auth from '../views/auth/index.vue'
 import Login from '../views/auth/login/index.vue'
 import Register from '../views/auth/register/index.vue'
 import store from '../store/index'
+import InsertProduct from '../views/InsertProducts.vue'
 
 Vue.use(VueRouter)
 
@@ -13,6 +14,12 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/insert',
+    name: 'InsertProduct',
+    component: InsertProduct,
     meta: { requiresAuth: true }
   },
   {

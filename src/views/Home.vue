@@ -9,6 +9,19 @@
     <a href="#" class="btn btn-primary">Go somewhere</a>
   </div>
 </div>
+<!-- pagination -->
+  <nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+    </li>
+    <li v-for="noPage in getPagination.totalPage" class="page-item" :class="[getPagination.currentPage == noPage ? 'active': '']" :key="noPage"><a class="page-link" href="#" @click.prevent="getAllProduct(noPage)">{{noPage}}</a></li>
+    <li class="page-item"
+    :class="[getPagination.currentPage == getPagination.totalPage ? 'disabled': '']">
+      <a class="page-link" href="#" @click.prevent="getAllProduct(parseInt(getPagination.currentPage)+1)">Next</a>
+    </li>
+  </ul>
+</nav>
 </div>
 </template>
 
@@ -24,7 +37,7 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['getProduct'])
+    ...mapGetters(['getProduct', 'getPagination'])
   },
   mounted () {
     this.getAllProduct()
